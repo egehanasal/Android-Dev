@@ -40,6 +40,7 @@ public class ContactActivity extends AppCompatActivity {
     SQLiteDatabase database;
     private ActivityContactBinding binding;
     private boolean flag = false;
+    private boolean imageFlag;
 
     ActivityResultLauncher <Intent> activityResultLauncher;
     ActivityResultLauncher <String> permissionLauncher;
@@ -54,6 +55,7 @@ public class ContactActivity extends AppCompatActivity {
         setContentView(view);
 
         registerLauncher();
+        imageFlag = false;
 
         Intent intent = getIntent();
         String info = intent.getStringExtra("info");
@@ -100,6 +102,14 @@ public class ContactActivity extends AppCompatActivity {
         String surname = binding.surnameText.getText().toString();
         String phoneNumber = binding.phoneText.getText().toString();
 
+        if(name.equals("")) {
+            Toast.makeText(ContactActivity.this, "Contact must have name", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(!imageFlag) {
+            selectedImage = BitmapFactory.decodeResource(ContactActivity.this.getResources(), R.drawable.defaultpicture);
+        }
         Bitmap smallImage = shrinkImage(selectedImage, 300);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         smallImage.compress(Bitmap.CompressFormat.PNG, 50, outputStream);
@@ -144,12 +154,18 @@ public class ContactActivity extends AppCompatActivity {
             String new_name = binding.nameText.getText().toString();
             String new_surname = binding.surnameText.getText().toString();
             String new_phone_number = binding.phoneText.getText().toString();
-            String sqlString = "UPDATE contactInfo SET name = ?, surname=?, phoneNumber=? WHERE id=" + contact_id;
 
+            Bitmap smallImage = shrinkImage(selectedImage, 300);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            smallImage.compress(Bitmap.CompressFormat.PNG, 50, outputStream);
+            byte[] byteArr = outputStream.toByteArray();
+
+            String sqlString = "UPDATE contactInfo SET name = ?, surname=?, phoneNumber=?, image=? WHERE id=" + contact_id;
             SQLiteStatement sqLiteStatement = database.compileStatement(sqlString);
             sqLiteStatement.bindString(1, new_name);
             sqLiteStatement.bindString(2, new_surname);
             sqLiteStatement.bindString(3, new_phone_number);
+            sqLiteStatement.bindBlob(4, byteArr);
             sqLiteStatement.execute();
 
         } catch(Exception e) {
@@ -236,10 +252,12 @@ public class ContactActivity extends AppCompatActivity {
                                 ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), imageData);
                                 selectedImage = ImageDecoder.decodeBitmap(source);
                                 binding.imageView.setImageBitmap(selectedImage);
+                                imageFlag = true;
                             }
                             else {
                                 selectedImage = MediaStore.Images.Media.getBitmap(getContentResolver(), imageData);
                                 binding.imageView.setImageBitmap(selectedImage);
+                                imageFlag = true;
                             }
 
                         } catch (Exception e) {
