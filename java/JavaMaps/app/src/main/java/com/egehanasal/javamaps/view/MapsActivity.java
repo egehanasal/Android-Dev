@@ -1,4 +1,4 @@
-package com.egehanasal.javamaps;
+package com.egehanasal.javamaps.view;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -7,9 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.room.Room;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,14 +20,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.egehanasal.javamaps.R;
+import com.egehanasal.javamaps.databinding.ActivityMapsBinding;
+import com.egehanasal.javamaps.model.Place;
+import com.egehanasal.javamaps.roomdb.PlaceDao;
+import com.egehanasal.javamaps.roomdb.PlaceDatabase;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.egehanasal.javamaps.databinding.ActivityMapsBinding;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Map;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,GoogleMap.OnMapLongClickListener {
 
@@ -38,6 +51,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ActivityResultLauncher <String> permissionLauncher;
 
     private static boolean flag = true;
+
+    PlaceDatabase db;
+    PlaceDao placeDao;
+
+    double selectedLatitude;
+    double selectedLongitude;
+
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,17 +73,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        db = Room.databaseBuilder(getApplicationContext(), PlaceDatabase.class, "PlacesDatabase").build();
+        placeDao = db.placeDao();
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -153,5 +168,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Önceden koyulan marker'ı kaldırıyor yeni marker koymak istediğimizde
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(latLng));
+
+        selectedLatitude = latLng.latitude;
+        selectedLongitude = latLng.longitude;
+
+    }
+
+    public void save(View view) {
+        Place place = new Place(binding.placeNameText.getText().toString(), selectedLatitude, selectedLongitude);
+
+        /**
+         * THREADS
+         * Main (UI): Ağır işlemler yapılırsa kullanıcı arayüzünü bloklayabilir uygulamayı çökertebilir
+         * Default: (CPU Intensive): Arka planda çalışan yoğun işlemler burada yapılır
+         * IO (network, database)
+         */
+
+        // placeDao.insert(place).subscribeOn(Schedulers.io()).subscribe();
+        // Disposable kullanmak memory'i rahatlatmaya yardımcı olacak. İşlem bittikten sonra çöpe atıyoruz
+        // O yüzden üstteki kodu comment'leyip alttakini yazıyorum.
+        compositeDisposable.add(placeDao.insert(place).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(MapsActivity.this :: handleResponse)); // handleResponse methoduna referans veriliyor.
+        // IO thread'inde çalışacak fakat Main thread'de gözlemleyeceğiz. O yüzden observeOn methodu kullanıldı.
+        // Save'e bastıktan sonra intent, fonskiyonun devamına yazılabilirdi fakat subscribe'ın içinde handleResponse demek de
+        // alternatif bir çözüm.
+    }
+
+    private void handleResponse() {
+        Intent intent = new Intent(MapsActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Bütün aktiviteleri kapatıp öyle git
+        startActivity(intent);
+    }
+
+    public void delete(View view) {
+        /*
+        compositeDisposable.add(placeDao.delete().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(MapsActivity.this :: handleResponse));
+         */
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

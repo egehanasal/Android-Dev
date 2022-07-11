@@ -5,7 +5,9 @@
       <map>
         <entry key="..\:/Users/egehan/AndroidStudioProjects/JavaMaps/app/src/main/res/layout/activity_main.xml" value="0.275" />
         <entry key="..\:/Users/egehan/AndroidStudioProjects/JavaMaps/app/src/main/res/layout/activity_maps.xml" value="0.275" />
+        <entry key="..\:/Users/egehan/AndroidStudioProjects/JavaMaps/app/src/main/res/layout/place_menu.xml" value="0.275" />
         <entry key="..\:/Users/egehan/AndroidStudioProjects/JavaMaps/app/src/main/res/layout/recycler_row.xml" value="0.275" />
+        <entry key="..\:/Users/egehan/AndroidStudioProjects/JavaMaps/app/src/main/res/menu/travel_menu.xml" value="0.275" />
       </map>
     </option>
   </component>
