@@ -42,12 +42,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
-    /** YAPILACAKLAR
-     *
-     * room db oluştur bu activity'de
-     * thread'leri düzenle
-     */
-
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
 
