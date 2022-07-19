@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "968341304953",
+    "project_id": "twitterclonejava-ffcb4",
+    "storage_bucket": "twitterclonejava-ffcb4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968341304953:android:683aab2dd3761c71ec86a8",
+        "android_client_info": {
+          "package_name": "com.egehanasal.twitterclonejava"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968341304953-3oa39bh95um73lfm7l7nqtq0s02imba1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdEqS7RqA2cqT2nQ7UBPo7Nl0Hmt1hDbw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968341304953-3oa39bh95um73lfm7l7nqtq0s02imba1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
