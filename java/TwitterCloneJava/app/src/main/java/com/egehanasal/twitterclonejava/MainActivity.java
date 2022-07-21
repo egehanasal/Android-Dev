@@ -39,7 +39,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signInClicked(View view) {
+        String email = binding.emailText.getText().toString();
+        String password = binding.passwordText.getText().toString();
 
+        if(email.equals("") || password.equals("")) {
+            Toast.makeText(this, "Email and password cannot be empty", Toast.LENGTH_LONG).show();
+        }
+        else {
+            auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                @Override
+                public void onSuccess(AuthResult authResult) {
+                    Intent intent = new Intent(MainActivity.this, FeedActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(MainActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     public void signUpClicked (View view) {
