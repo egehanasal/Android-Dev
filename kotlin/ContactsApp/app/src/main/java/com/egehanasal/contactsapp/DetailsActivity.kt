@@ -15,11 +15,24 @@ class DetailsActivity : AppCompatActivity() {
         setContentView(view)
 
         val intent = intent
+        /*
         val selectedContact = intent.getSerializableExtra("contact") as Contact
+         */
 
-        binding.nameText.text = selectedContact.name
-        binding.surnameText.text = selectedContact.surname
-        binding.ageText.text = selectedContact.age.toString()
-        binding.imageView.setImageResource(selectedContact.Image)
+        val selectedContact = MySingleton.chosenContact
+
+        selectedContact?.let {
+            binding.nameText.text = it.name
+            binding.surnameText.text = it.surname
+            binding.ageText.text = it.age.toString()
+            binding.imageView.setImageResource(it.Image)
+
+            /* Bu şekilde de yazılabilir
+            binding.nameText.text = selectedContact!!.name
+            binding.surnameText.text = selectedContact!!.surname
+            binding.ageText.text = selectedContact!!.age.toString()
+            binding.imageView.setImageResource(selectedContact!!.Image)
+             */
+        }
     }
 }

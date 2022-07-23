@@ -25,7 +25,11 @@ class ContactAdapter (private val contactList: ArrayList<Contact>) : RecyclerVie
 
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, DetailsActivity :: class.java)
+            /*
             intent.putExtra("contact", contactList[position])
+            holder.itemView.context.startActivity(intent)
+             */
+            MySingleton.chosenContact = contactList[position]
             holder.itemView.context.startActivity(intent)
         }
     }
