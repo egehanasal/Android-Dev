@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF6F61"
+    tools:context=".DetailsActivity">
+
+    <EditText
+        android:id="@+id/nameText"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="60dp"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <EditText
+        android:id="@+id/surnameText"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="45dp"
+        android:ems="10"
+        android:hint="Surname"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/nameText"
+        app:layout_constraintStart_toStartOf="@+id/nameText"
+        app:layout_constraintTop_toBottomOf="@+id/nameText" />
+
+    <EditText
+        android:id="@+id/yearText"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="45dp"
+        android:ems="10"
+        android:hint="birthYear"
+        android:inputType="number"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/surnameText"
+        app:layout_constraintStart_toStartOf="@+id/surnameText"
+        app:layout_constraintTop_toBottomOf="@+id/surnameText" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="111dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="55dp"
+        android:onClick="saveButtonClicked"
+        android:text="save"
+        app:layout_constraintEnd_toEndOf="@+id/yearText"
+        app:layout_constraintStart_toStartOf="@+id/yearText"
+        app:layout_constraintTop_toBottomOf="@+id/yearText" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="257dp"
+        android:layout_height="171dp"
+        android:layout_marginTop="60dp"
+        android:onClick="selectImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/selectimage" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
