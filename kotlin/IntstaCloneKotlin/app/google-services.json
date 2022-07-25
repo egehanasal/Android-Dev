@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "870872855580",
+    "project_id": "instaclonekotlin-678fc",
+    "storage_bucket": "instaclonekotlin-678fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870872855580:android:4bf54c6ab4ddab41821bd9",
+        "android_client_info": {
+          "package_name": "com.egehanasal.intstaclonekotlin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "870872855580-ufqcjj4ghtuinjrlp01mthct22rptnr5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsDrdHpljHTOWrPIvUu8dSGal3jmiZsPg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "870872855580-ufqcjj4ghtuinjrlp01mthct22rptnr5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
