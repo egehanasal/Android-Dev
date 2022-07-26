@@ -9,19 +9,26 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.egehanasal.intstaclonekotlin.databinding.ActivityUploadBinding
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import java.util.*
 
 class UploadActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityUploadBinding
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
+
+    private lateinit var auth : FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var firebaseStorage: FirebaseStorage
 
     var selectedImage : Uri? = null
 
@@ -32,9 +39,28 @@ class UploadActivity : AppCompatActivity() {
         setContentView(view)
 
         registerLauncher()
+
+        auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
+        firebaseStorage = FirebaseStorage.getInstance()
+
     }
 
-    fun save(view: View) {
+    fun upload(view: View) {
+
+        val uuid = UUID.randomUUID()
+        val imageName = "$uuid.jpg"
+
+        val reference = firebaseStorage.reference
+        val imageReference = reference.child("images").child(imageName)
+
+        if(selectedImage != null) {
+            imageReference.putFile(selectedImage!!).addOnSuccessListener{
+            // download url -> firestore
+            }.addOnFailureListener{
+                Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
+            }
+        }
 
     }
 
