@@ -1,4 +1,4 @@
-package com.egehanasal.intstaclonekotlin
+package com.egehanasal.intstaclonekotlin.View
 
 import android.Manifest
 import android.content.Intent
@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.egehanasal.intstaclonekotlin.databinding.ActivityUploadBinding
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -57,6 +58,22 @@ class UploadActivity : AppCompatActivity() {
         if(selectedImage != null) {
             imageReference.putFile(selectedImage!!).addOnSuccessListener{
             // download url -> firestore
+                val uploadPictureReference = reference.child("images").child(imageName)
+                uploadPictureReference.downloadUrl.addOnSuccessListener {
+                    val downloadUrl = it.toString()
+
+                    val postMap = hashMapOf<String, Any>()
+                    postMap["downloadUrl"] = downloadUrl //postmap.put("downloadUrl", downloadUrl)
+                    postMap["userEmail"] = auth.currentUser!!.email!!
+                    postMap["comment"] = binding.commentText.text.toString()
+                    postMap["date"] = Timestamp.now()
+
+                    firestore.collection("Posts").add(postMap).addOnSuccessListener {
+                        finish()
+                    }.addOnFailureListener{ exception ->
+                        Toast.makeText(this, exception.localizedMessage, Toast.LENGTH_LONG).show()
+                    }
+                }
             }.addOnFailureListener{
                 Toast.makeText(this, it.localizedMessage, Toast.LENGTH_LONG).show()
             }
